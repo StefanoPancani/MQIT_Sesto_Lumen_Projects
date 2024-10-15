@@ -1,0 +1,3070 @@
+{
+  "productInfo" : {
+    "company" : "HighByte",
+    "product" : "IntelligenceHub",
+    "version" : "3.4.5",
+    "build" : "2024.7.18.2",
+    "stage" : "Release"
+  },
+  "project" : {
+    "version" : 8,
+    "connections" : [ {
+      "name" : "MQTT_A7_CASEPACKER_LOCAL",
+      "uri" : "mqtt://0.0.0.0:1885",
+      "description" : "Connection to the broker MQTT Mosquitto",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "writes" : {
+        "flattenModeledValues" : false
+      },
+      "storeForward" : {
+        "enabled" : false,
+        "maxEntries" : 100,
+        "waitOnFailureInterval" : {
+          "duration" : 1,
+          "units" : "Seconds"
+        }
+      },
+      "settings" : {
+        "connectionTimeoutSeconds" : 10,
+        "keepAliveSeconds" : 60,
+        "requestTimeoutMS" : 5000,
+        "cleanSession" : true,
+        "ssl" : false,
+        "redundantBrokers" : [ ],
+        "inputDiscovery" : "",
+        "username" : "MATT",
+        "password" : {
+          "type" : "Encrypted",
+          "value" : {
+            "keyId" : "npXakvYuNEw3w2zYNxi48g==",
+            "iv" : "6KqW5gNOuaubwuZknWiePQ==",
+            "ciphertext" : "XuNX2dXF+evH9jdvvmfgUw=="
+          }
+        }
+      }
+    }, {
+      "name" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "uri" : "opc.tcp://{{System.Variables.KepwareAO}}:49320",
+      "description" : "OPC Connection through KepServerEX",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "writes" : {
+        "flattenModeledValues" : false
+      },
+      "subscriptions" : {
+        "subscriptionRate" : {
+          "duration" : 1,
+          "units" : "Seconds"
+        }
+      },
+      "storeForward" : {
+        "enabled" : false,
+        "maxEntries" : 100,
+        "waitOnFailureInterval" : {
+          "duration" : 1,
+          "units" : "Seconds"
+        }
+      },
+      "settings" : {
+        "security" : "None",
+        "authentication" : {
+          "type" : "Username_Basic256",
+          "username" : "APP_A7D2D_RW",
+          "password" : {
+            "type" : "Encrypted",
+            "value" : {
+              "keyId" : "npXakvYuNEw3w2zYNxi48g==",
+              "iv" : "7XRZX/z4CORUhajTvjw8XQ==",
+              "ciphertext" : "HecLoNZ93GUBp7vGrTtmE1U3mWf90bPbcVCM1aa5LMs="
+            }
+          }
+        },
+        "connectTimeoutSeconds" : 10,
+        "requestTimeoutMS" : 5000,
+        "maxItemsPerRead" : 512,
+        "maxItemsPerWrite" : 256,
+        "sessionName" : ""
+      }
+    }, {
+      "name" : "ORACLE_A7_CASEPACKER",
+      "uri" : "jdbc.oracledatabase://xfrhdmpa02.ema.lilly.com:1526",
+      "tags" : [ "D2DCasepacker" ],
+      "writes" : {
+        "flattenModeledValues" : false
+      },
+      "storeForward" : {
+        "enabled" : false,
+        "maxEntries" : 100,
+        "waitOnFailureInterval" : {
+          "duration" : 1,
+          "units" : "Seconds"
+        }
+      },
+      "settings" : {
+        "database" : "DEV448",
+        "username" : "A7_D2D_HB_USER",
+        "password" : {
+          "type" : "Encrypted",
+          "value" : {
+            "keyId" : "npXakvYuNEw3w2zYNxi48g==",
+            "iv" : "DM7BnY6aLEXA9+C3bOJdnA==",
+            "ciphertext" : "PSoFol9Q63FvNzQp8DRd3vMpY8gkVcOqsaanUVgu86o="
+          }
+        }
+      }
+    }, {
+      "name" : "REST_A7_CASEPACKER_ROBOTICS",
+      "uri" : "rest.client://REST_Robotics_Test",
+      "description" : "REST API for PMX Robotics interface",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "writes" : {
+        "flattenModeledValues" : false
+      },
+      "storeForward" : {
+        "enabled" : false,
+        "maxEntries" : 100,
+        "waitOnFailureInterval" : {
+          "duration" : 1,
+          "units" : "Seconds"
+        }
+      },
+      "settings" : {
+        "authentication" : {
+          "type" : "None"
+        },
+        "baseURL" : "{{System.Variables.RoboticsPMX_v14}}"
+      }
+    } ],
+    "inputs" : [ {
+      "name" : "Casepacker_Kepware_Values_Pos",
+      "connection" : "MQTT_A7_CASEPACKER_LOCAL",
+      "type" : "mqtt",
+      "qualifier" : {
+        "payloadType" : "json",
+        "qos" : 0,
+        "topic" : "sesto/PDL/A7Wet/Casepacker/stationstatus/PLC_CSPK_PLC_CSPK_A7_Global_Pos_{{this.pos}}",
+        "includeTopic" : false
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      },
+      "template" : {
+        "name" : "Casepacker_PLC_Values_Pos{{this.pos}}",
+        "type" : "Static",
+        "params" : {
+          "pos" : "5,7"
+        }
+      }
+    }, {
+      "name" : "Casepacker_PLC_Values_Pos5",
+      "connection" : "MQTT_A7_CASEPACKER_LOCAL",
+      "type" : "mqtt",
+      "qualifier" : {
+        "payloadType" : "json",
+        "qos" : 0,
+        "topic" : "sesto/PDL/A7Wet/Casepacker/stationstatus/PLC_CSPK_A7_Pos_5",
+        "includeTopic" : false
+      },
+      "cacheLifetime" : {
+        "enabled" : false,
+        "interval" : {
+          "duration" : 1,
+          "units" : "Seconds"
+        }
+      }
+    }, {
+      "name" : "Casepacker_PLC_Values_Pos7",
+      "connection" : "MQTT_A7_CASEPACKER_LOCAL",
+      "type" : "mqtt",
+      "qualifier" : {
+        "payloadType" : "json",
+        "qos" : 0,
+        "topic" : "sesto/PDL/A7Wet/Casepacker/stationstatus/PLC_CSPK_A7_Pos_7",
+        "includeTopic" : false
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      }
+    }, {
+      "name" : "PLC_CSPK_A7_Pos_5",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "type" : "Collection",
+        "samplingInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "ignoreBadQuality" : true,
+        "collection" : [ {
+          "identifierType" : "String",
+          "name" : "SerialRequest_P5_SerialNumber",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_SerialRequest.SerialNumber.DATA/82"
+        }, {
+          "identifierType" : "String",
+          "name" : "SerialRequest_P5_ErrorMsg",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_SerialRequest.ErrorMsg.DATA/82"
+        }, {
+          "identifierType" : "String",
+          "name" : "SerialRequest_P5_Result",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_SerialRequest.Result"
+        }, {
+          "identifierType" : "String",
+          "name" : "SerialRequest_P5_ReqAck",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_SerialRequest.ReqAck"
+        }, {
+          "identifierType" : "String",
+          "name" : "SerialRequest_P5_CmdReq",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_SerialRequest.CmdReq"
+        }, {
+          "identifierType" : "String",
+          "name" : "LCRelocation_P5_CmdReq",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_LCRelocation.CmdReq"
+        }, {
+          "identifierType" : "String",
+          "name" : "TUCreation_P5_TUMaterialNo",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_TUCreation.TUMaterialNo.DATA/20"
+        }, {
+          "identifierType" : "String",
+          "name" : "TUCreation_P5_TUIdentifier",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_TUCreation.TUIdentifier.DATA/16"
+        }, {
+          "identifierType" : "String",
+          "name" : "TUCreation_P5_Result",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_TUCreation.Result"
+        }, {
+          "identifierType" : "String",
+          "name" : "TUCreation_P5_ReqAck",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_TUCreation.ReqAck"
+        }, {
+          "identifierType" : "String",
+          "name" : "TUCreation_P5_ErrorMsg",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_TUCreation.ErrorMsg.DATA/82"
+        }, {
+          "identifierType" : "String",
+          "name" : "TUCreation_P5_CmdSerialNumLC",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_TUCreation.CmdSerialNumLC.DATA/82"
+        }, {
+          "identifierType" : "String",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_TUCreation.CmdSerialNum.DATA/82",
+          "name" : "TUCreation_P5_CmdSerialNum",
+          "namespaceIndex" : "2"
+        }, {
+          "identifierType" : "String",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_TUCreation.CmdReq",
+          "name" : "TUCreation_P5_CmdReq",
+          "namespaceIndex" : "2"
+        }, {
+          "identifierType" : "String",
+          "name" : "TUCreation_P5_CmqQty",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_TUCreation.CmdQty"
+        }, {
+          "identifierType" : "String",
+          "name" : "TUCreation_P5_CmdOrderStep",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_TUCreation.CmdOrderStep.DATA/16"
+        }, {
+          "identifierType" : "String",
+          "name" : "TUCreation_P5_CmdLC",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_TUCreation.CmdLC.DATA/16"
+        }, {
+          "identifierType" : "String",
+          "name" : "EmptyLCIdentification_P5_Result",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_EmptyLC.Result"
+        }, {
+          "identifierType" : "String",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_EmptyLC.ResMessage.DATA/82",
+          "name" : "EmptyLCIdentification_P5_ResMessage",
+          "namespaceIndex" : "2"
+        }, {
+          "identifierType" : "String",
+          "name" : "EmptyLCIdentification_P5_ReqAck",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_EmptyLC.ReqAck"
+        }, {
+          "identifierType" : "String",
+          "name" : "EmptyLCIdentification_P5_CmdReq",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_EmptyLC.CmdReq"
+        }, {
+          "identifierType" : "String",
+          "name" : "EmptyLCIdentification_P5_CmdLC",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_EmptyLC.CmdLC.DATA/16"
+        }, {
+          "identifierType" : "String",
+          "name" : "LCRelocation_P5_Result",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS5_LCRelocation.Result"
+        }, {
+          "identifierType" : "String",
+          "name" : "LCRelocation_P5_ReqAck",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS5_LCRelocation.ReqAck"
+        }, {
+          "identifierType" : "String",
+          "name" : "LCRelocation_P5_ErrorMsg",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS5_LCRelocation.ErrorMsg.DATA/82"
+        }, {
+          "identifierType" : "String",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS5_LCRelocation.CmdSL.DATA/16",
+          "name" : "LCRelocation_P5_CmdSL",
+          "namespaceIndex" : "2"
+        }, {
+          "identifierType" : "String",
+          "name" : "LCRelocation_P5_CmdLC",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS5_LCRelocation.CmdLC.DATA/16"
+        } ]
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      }
+    }, {
+      "name" : "PLC_CSPK_A7_Pos_7",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "type" : "Collection",
+        "samplingInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "ignoreBadQuality" : true,
+        "collection" : [ {
+          "identifierType" : "String",
+          "name" : "LCRelocation_P7_CmdReq",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos7_LCRelocation.CmdReq"
+        }, {
+          "identifierType" : "String",
+          "name" : "LCRelocation_P7_Result",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS7_LCRelocation.Result"
+        }, {
+          "identifierType" : "String",
+          "name" : "LCRelocation_P7_ReqAck",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS7_LCRelocation.ReqAck"
+        }, {
+          "identifierType" : "String",
+          "name" : "LCRelocation_P7_ErrorMsg",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS7_LCRelocation.ErrorMsg.DATA/82"
+        }, {
+          "identifierType" : "String",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS7_LCRelocation.CmdSL.DATA/16",
+          "name" : "LCRelocation_P7_CmdSL",
+          "namespaceIndex" : "2"
+        }, {
+          "identifierType" : "String",
+          "name" : "LCRelocation_P7_CmdLC",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS7_LCRelocation.CmdLC.DATA/16"
+        } ]
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      }
+    }, {
+      "name" : "PLC_CSPK_A7_Template",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "type" : "Collection",
+        "samplingInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "ignoreBadQuality" : true,
+        "collection" : [ {
+          "identifierType" : "String",
+          "name" : "LCRelocation_P{{this.pos}}_Result",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_{{this.pos}}_LCRelocation.Result"
+        }, {
+          "identifierType" : "String",
+          "name" : "LCRelocation_P{{this.pos}}_ReqAck",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_{{this.pos}}_LCRelocation.ReqAck"
+        }, {
+          "identifierType" : "String",
+          "name" : "LCRelocation_P{{this.pos}}_ErrorMsg",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_{{this.pos}}_LCRelocation.ErrorMsg.DATA/82"
+        }, {
+          "identifierType" : "String",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_{{this.pos}}_LCRelocation.CmdSL.DATA/16",
+          "name" : "LCRelocation_P{{this.pos}}_CmdSL",
+          "namespaceIndex" : "2"
+        }, {
+          "identifierType" : "String",
+          "name" : "LCRelocation_P{{this.pos}}_CmdLC",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_{{this.pos}}_LCRelocation.CmdLC.DATA/16"
+        }, {
+          "identifierType" : "String",
+          "name" : "LCRelocation_P{{this.pos}}_CmdReq",
+          "namespaceIndex" : "2",
+          "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_{{this.pos}}_TUIDENTIFICATION.CmdReq"
+        } ]
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      },
+      "template" : {
+        "name" : "PLC_CSPK_A7_Pos_{{this.pos}}",
+        "type" : "Static",
+        "params" : {
+          "pos" : "1,5,7"
+        }
+      }
+    }, {
+      "name" : "CheckManualSerial",
+      "connection" : "ORACLE_A7_CASEPACKER",
+      "type" : "jdbc.oracledatabase",
+      "qualifier" : {
+        "query" : "SELECT \n    CASE \n        WHEN EXISTS (\n            SELECT 1 \n            FROM XFHISTORIAN.SESNUMBERS \n            WHERE OPERATING_MODE = 'MANUAL' \n              AND STATUS = 'N'\n        ) THEN 1 \n        ELSE 0 \n    END AS Found\nFROM dual"
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      }
+    }, {
+      "name" : "CleanUpTable",
+      "connection" : "ORACLE_A7_CASEPACKER",
+      "type" : "jdbc.oracledatabase",
+      "qualifier" : {
+        "query" : "select XFHISTORIAN.SESPACK.SESNUMBERS_CLEANUP('12347') as RESULT from dual",
+        "index" : {
+          "enabled" : false,
+          "indexName" : "",
+          "indexValue" : ""
+        }
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      }
+    }, {
+      "name" : "GetSerialNumber_AUTO",
+      "connection" : "ORACLE_A7_CASEPACKER",
+      "type" : "jdbc.oracledatabase",
+      "qualifier" : {
+        "query" : "select xfhistorian.sespack.getnewserialnumber('12346','AUTO') as SerialNumber from dual",
+        "index" : {
+          "enabled" : false,
+          "indexName" : "",
+          "indexValue" : ""
+        }
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      }
+    }, {
+      "name" : "GetSerialNumber_MANUAL",
+      "connection" : "ORACLE_A7_CASEPACKER",
+      "type" : "jdbc.oracledatabase",
+      "qualifier" : {
+        "query" : "select xfhistorian.sespack.getnewserialnumber('12346','MANUAL') as SerialNumber from dual",
+        "index" : {
+          "enabled" : false,
+          "indexName" : "",
+          "indexValue" : ""
+        }
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      }
+    }, {
+      "name" : "MarkAsProcessed",
+      "connection" : "ORACLE_A7_CASEPACKER",
+      "type" : "jdbc.oracledatabase",
+      "qualifier" : {
+        "query" : "SELECT XFHISTORIAN.SESPACK.MarkAsProcessed('12346', '12345678928', 'MANUAL') as RESULT from DUAL",
+        "index" : {
+          "enabled" : false,
+          "indexName" : "",
+          "indexValue" : ""
+        }
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      }
+    }, {
+      "name" : "Casepacker_Check_Empty",
+      "connection" : "REST_A7_CASEPACKER_ROBOTICS",
+      "type" : "rest.client",
+      "qualifier" : {
+        "acceptType" : "*/*",
+        "method" : "POST",
+        "includeMetadata" : true,
+        "endpointURL" : "check-empty-lc",
+        "contentType" : "application/json",
+        "body" : "{\n  \"lcBarcode\":\"{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos{{this.pos}}.EmptyLCIdentification_P5_CmdLC}}\"\n}",
+        "isFile" : false
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      },
+      "template" : {
+        "name" : "Casepacker_Check_Empty_at_Pos{{this.pos}}",
+        "type" : "Static",
+        "params" : {
+          "pos" : "5"
+        }
+      }
+    }, {
+      "name" : "Casepacker_Check_Empty_at_Pos5",
+      "connection" : "REST_A7_CASEPACKER_ROBOTICS",
+      "type" : "rest.client",
+      "qualifier" : {
+        "acceptType" : "*/*",
+        "method" : "POST",
+        "includeMetadata" : true,
+        "endpointURL" : "check-empty-lc",
+        "contentType" : "application/json",
+        "body" : "{\n  \"lcBarcode\":\"{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos5.EmptyLCIdentification_P5_CmdLC}}\"\n}",
+        "isFile" : false
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      }
+    }, {
+      "name" : "Casepacker_Relocate",
+      "connection" : "REST_A7_CASEPACKER_ROBOTICS",
+      "type" : "rest.client",
+      "qualifier" : {
+        "acceptType" : "*/*",
+        "method" : "POST",
+        "includeMetadata" : true,
+        "endpointURL" : "lc-send-to-wes",
+        "contentType" : "application/json",
+        "body" : "{\n\"lcBarcode\":\"{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos{{this.pos}}.CmdLC_Relocation_DATA}}\",\n\"targetLocation\":\"{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos{{this.pos}}.CmdSL_Relocation_DATA}}\"\n}\n",
+        "isFile" : false
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      },
+      "template" : {
+        "name" : "Casepacker_Relocate_at_Pos{{this.pos}}",
+        "type" : "Static",
+        "params" : {
+          "pos" : "5,7"
+        }
+      }
+    }, {
+      "name" : "Casepacker_Relocate_at_Pos5",
+      "connection" : "REST_A7_CASEPACKER_ROBOTICS",
+      "type" : "rest.client",
+      "qualifier" : {
+        "acceptType" : "*/*",
+        "method" : "POST",
+        "includeMetadata" : true,
+        "endpointURL" : "lc-send-to-wes",
+        "contentType" : "application/json",
+        "body" : "{\n\"lcBarcode\":\"{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos5.LCRelocation_P5_CmdLC}}\",\n\"targetLocation\":\"{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos5.LCRelocation_P5_CmdSL}}\"\n}\n",
+        "isFile" : false
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      }
+    }, {
+      "name" : "Casepacker_Relocate_at_Pos7",
+      "connection" : "REST_A7_CASEPACKER_ROBOTICS",
+      "type" : "rest.client",
+      "qualifier" : {
+        "acceptType" : "*/*",
+        "method" : "POST",
+        "includeMetadata" : true,
+        "endpointURL" : "lc-send-to-wes",
+        "contentType" : "application/json",
+        "body" : "{\n\"lcBarcode\":\"{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos7.LCRelocation_P7_CmdLC}}\",\n\"targetLocation\":\"{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos7.LCRelocation_P7_CmdSL}}\"\n}\n",
+        "isFile" : false
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      }
+    }, {
+      "name" : "Casepacker_TuCreation",
+      "connection" : "REST_A7_CASEPACKER_ROBOTICS",
+      "type" : "rest.client",
+      "qualifier" : {
+        "acceptType" : "*/*",
+        "method" : "POST",
+        "includeMetadata" : true,
+        "endpointURL" : "out-tu-creation?orderstepno={{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos{{this.pos}}.CmdOrderStep_TUCreation_DATA}}",
+        "contentType" : "application/json",
+        "isFile" : false,
+        "body" : "{\n\"quantity\":\"{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos{{this.pos}}.CmdQty_TUCreation_DATA}}\",\n\"serialNumber\":\"{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos{{this.pos}}.CmdSerialNum_TUCreation_DATA}}\",\n\"lcBarcode\":\"{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos{{this.pos}}.CmdLC_TUCreation_DATA}}\"\n}\n"
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      },
+      "template" : {
+        "name" : "Casepacker_TuCreation_at_Pos{{this.pos}}",
+        "type" : "Static",
+        "params" : {
+          "pos" : "5"
+        }
+      }
+    }, {
+      "name" : "Casepacker_TuCreation_at_Pos5",
+      "connection" : "REST_A7_CASEPACKER_ROBOTICS",
+      "type" : "rest.client",
+      "qualifier" : {
+        "acceptType" : "*/*",
+        "method" : "POST",
+        "includeMetadata" : true,
+        "endpointURL" : "out-tu-creation?orderstepno={{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos5.TUCreation_P5_CmdOrderStep}}",
+        "contentType" : "application/json",
+        "isFile" : false,
+        "body" : "{\n\"quantity\":\"{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos5.TUCreation_P5_CmqQty}}\",\n\"serialNumber\":\"\",\n\"lcBarcode\":\"{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos5.TUCreation_P5_CmdLC}}\"\n}\n"
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      }
+    }, {
+      "name" : "MANUAL_Outgoing_Tu_Creation",
+      "connection" : "REST_A7_CASEPACKER_ROBOTICS",
+      "type" : "rest.client",
+      "qualifier" : {
+        "acceptType" : "*/*",
+        "method" : "POST",
+        "includeMetadata" : true,
+        "endpointURL" : "out-tu-creation?orderstepno=EQO-37191710",
+        "contentType" : "application/json",
+        "isFile" : false,
+        "body" : "{\n\"quantity\":\"1\",\n\"serialNumber\":\"\",\n\"lcBarcode\":\"0000000527\"\n}\n"
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      }
+    }, {
+      "name" : "MANUAL_Test_Check_Empty",
+      "connection" : "REST_A7_CASEPACKER_ROBOTICS",
+      "type" : "rest.client",
+      "qualifier" : {
+        "acceptType" : "*/*",
+        "method" : "POST",
+        "includeMetadata" : true,
+        "endpointURL" : "check-empty-lc",
+        "contentType" : "application/json",
+        "body" : "{\n  \"lcBarcode\":\"!0000241562 \"\n}",
+        "isFile" : false
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      }
+    }, {
+      "name" : "MANUAL_Test_Relocate",
+      "connection" : "REST_A7_CASEPACKER_ROBOTICS",
+      "type" : "rest.client",
+      "qualifier" : {
+        "acceptType" : "*/*",
+        "method" : "POST",
+        "includeMetadata" : true,
+        "endpointURL" : "lc-send-to-wes",
+        "contentType" : "application/json",
+        "body" : "{\n\"lcBarcode\":\"0000000983\",\n\"targetLocation\":\"A4PKG OUT\"\n}\n",
+        "isFile" : false
+      },
+      "cacheLifetime" : {
+        "enabled" : false
+      }
+    } ],
+    "outputs" : [ {
+      "name" : "Casepacker_Kepware_values",
+      "connection" : "MQTT_A7_CASEPACKER_LOCAL",
+      "type" : "mqtt",
+      "qualifier" : {
+        "qos" : 0,
+        "namedRoot" : false,
+        "breakupArrays" : false,
+        "topic" : "sesto/PDL/A7Wet/Casepacker/stationstatus/{{this._name}}",
+        "retained" : false,
+        "filterList" : [ "_model" ]
+      }
+    }, {
+      "name" : "EmptyLCIdentification_P5_ReqAck",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "Boolean",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_5_EMPTYLCIDENTIFICATION.REQACK@Boolean"
+      }
+    }, {
+      "name" : "EmptyLCIdentification_P5_ResMessage",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "String",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos_5_EmptyLCIdentification.RESMESSAGE.DATA/82@String"
+      }
+    }, {
+      "name" : "EmptyLCIdentification_P5_Result",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "Int16",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 1,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_5_EmptyLCIdentification.RESULT@Short"
+      }
+    }, {
+      "name" : "LCRelocation_P5_ErrorMSG",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "String",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_5_LCRelocation.ErrorMsg.DATA/82@String"
+      }
+    }, {
+      "name" : "LCRelocation_P5_ReqAck",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "Boolean",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_5_LCRelocation.ReqAck@Boolean"
+      }
+    }, {
+      "name" : "LCRelocation_P5_Result",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "Int16",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_5_LCRelocation.Result@Short"
+      }
+    }, {
+      "name" : "LCRelocation_P7_ErrorMSG",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "String",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_7_LCRelocation.ErrorMsg.DATA/82@String"
+      }
+    }, {
+      "name" : "LCRelocation_P7_ReqAck",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "Boolean",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_7_LCRelocation.ReqAck@Boolean"
+      }
+    }, {
+      "name" : "LCRelocation_P7_Result",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "Int16",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_7_LCRelocation.Result@Short"
+      }
+    }, {
+      "name" : "SerialRequest_P5_ErrorMsg",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "String",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_SerialRequest.ErrorMsg.DATA/82@String"
+      }
+    }, {
+      "name" : "SerialRequest_P5_ReqAck",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "Boolean",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS5_SerialRequest.REQACK@Boolean"
+      }
+    }, {
+      "name" : "SerialRequest_P5_Result",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "Int16",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 1,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS5_SerialRequest.Result@Short"
+      }
+    }, {
+      "name" : "SerialRequest_P5_SerialNumber",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "String",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_SerialRequest.SerialNumber.DATA/82@String"
+      }
+    }, {
+      "name" : "TUCreation_P5_ErrorMSG",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "String",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_5_TUCreation.ErrorMsg.DATA/82@String"
+      }
+    }, {
+      "name" : "TUCreation_P5_ReqAck",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "Boolean",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_5_TUCreation.REQACK@Boolean"
+      }
+    }, {
+      "name" : "TUCreation_P5_Result",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "Int16",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.POS_5_TUCreation.Result@Short"
+      }
+    }, {
+      "name" : "TUCreation_P5_TUIdentifier",
+      "connection" : "OPC_A7_CASEPACKER_KEPSERVEREX",
+      "type" : "opc.tcp",
+      "qualifier" : {
+        "namespaceIndex" : 2,
+        "identifierType" : "String",
+        "dataType" : "String",
+        "maxDepth" : 1,
+        "cacheInterval" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        },
+        "namedRoot" : false,
+        "browseVariableNodes" : false,
+        "breakupArrays" : false,
+        "identifier" : "A7_PACK_AB.PLC_CSPK_A7.Pos5_TUCreation.TUIdentifier.DATA/16@String"
+      }
+    } ],
+    "modeling" : {
+      "models" : [ {
+        "name" : "Casepacker_Check_Empty_Request",
+        "description" : "This model holds the values that shall be passed and returned by the check-empty request",
+        "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+        "groupAs" : "/D2DCasepackerModels",
+        "attributes" : [ {
+          "name" : "position",
+          "type" : "Int8",
+          "array" : false,
+          "required" : true
+        }, {
+          "name" : "lcBarcode",
+          "type" : "String",
+          "array" : false,
+          "required" : true
+        }, {
+          "name" : "check_empty_result",
+          "type" : "Int16",
+          "array" : false,
+          "required" : true
+        }, {
+          "name" : "check_empty_message",
+          "type" : "String",
+          "array" : false,
+          "required" : false
+        } ]
+      }, {
+        "name" : "Casepacker_Relocate_Request",
+        "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+        "groupAs" : "/D2DCasepackerModels",
+        "attributes" : [ {
+          "name" : "Position",
+          "type" : "Int8",
+          "array" : false,
+          "required" : true
+        }, {
+          "name" : "lcBarcode",
+          "type" : "String",
+          "array" : false,
+          "required" : true
+        }, {
+          "name" : "relocate_Result",
+          "type" : "Int16",
+          "array" : false,
+          "required" : true
+        }, {
+          "name" : "relocate_message",
+          "type" : "String",
+          "array" : false,
+          "required" : false
+        } ]
+      }, {
+        "name" : "Casepacker_SerialNumber_Request",
+        "tags" : [ "D2DCasepacker" ],
+        "groupAs" : "/D2DCasepackerModels",
+        "attributes" : [ {
+          "name" : "Position",
+          "type" : "Any",
+          "array" : false,
+          "required" : true
+        }, {
+          "name" : "serialRequest_Result",
+          "type" : "Int16",
+          "array" : false,
+          "required" : true
+        }, {
+          "name" : "serialRequest_message",
+          "type" : "String",
+          "array" : false,
+          "required" : false
+        }, {
+          "name" : "serialRequest_serialNumber",
+          "type" : "String",
+          "array" : false,
+          "required" : true
+        } ]
+      }, {
+        "name" : "Casepacker_TuCreation_Request",
+        "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+        "groupAs" : "/D2DCasepackerModels",
+        "attributes" : [ {
+          "name" : "Position",
+          "type" : "Int8",
+          "array" : false,
+          "required" : true
+        }, {
+          "name" : "lcBarcode",
+          "type" : "String",
+          "array" : false,
+          "required" : true
+        }, {
+          "name" : "outTuCreation_result",
+          "type" : "Int16",
+          "array" : false,
+          "required" : true
+        }, {
+          "name" : "outTuCreation_message",
+          "type" : "String",
+          "array" : false,
+          "required" : false
+        }, {
+          "name" : "outTuCreation_tuIdentifier",
+          "type" : "Any",
+          "array" : false,
+          "required" : false
+        } ]
+      } ],
+      "instances" : [ {
+        "name" : "Casepacker_Check_Empty_Request_Instance",
+        "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+        "model" : "Casepacker_Check_Empty_Request",
+        "groupAs" : "/D2DCasepackerInstances",
+        "rootValueAs" : "Object",
+        "attributes" : [ {
+          "name" : "position",
+          "expression" : "{{this.pos}}"
+        }, {
+          "name" : "lcBarcode",
+          "default" : "N/A",
+          "expression" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos{{this.pos}}}}.EmptyLCIdentification_P{{this.pos}}_CmdLC"
+        }, {
+          "name" : "check_empty_result",
+          "default" : "0",
+          "expression" : "if({{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_Check_Empty_at_Pos{{this.pos}}}}._statusCode == 200){\r\n    var result=1;\r\n}else if({{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_Check_Empty_at_Pos{{this.pos}}}}._statusCode == 500){\r\n    var result=2;\r\n}\r\nresult;"
+        }, {
+          "name" : "check_empty_message",
+          "default" : "Robotics not ON-LINE",
+          "expression" : "{{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_Check_Empty_at_Pos{{this.pos}}}}.value"
+        } ],
+        "template" : {
+          "name" : "Casepacker_Check_Empty_Request_pos{{this.pos}}",
+          "type" : "Static",
+          "params" : {
+            "pos" : "5,7"
+          }
+        }
+      }, {
+        "name" : "Casepacker_Check_Empty_Request_pos5",
+        "description" : "Instance relative to the CheckEmpty REST API in Position 5",
+        "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+        "model" : "Casepacker_Check_Empty_Request",
+        "groupAs" : "/D2DCasepackerInstances",
+        "rootValueAs" : "Object",
+        "attributes" : [ {
+          "name" : "position",
+          "expression" : "5"
+        }, {
+          "name" : "lcBarcode",
+          "default" : "N/A",
+          "expression" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos5}}.EmptyLCIdentification_P5_CmdLC"
+        }, {
+          "name" : "check_empty_result",
+          "default" : "0",
+          "expression" : "if({{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_Check_Empty_at_Pos5}}._statusCode == 200){\r\n    var result=1;\r\n}else if({{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_Check_Empty_at_Pos5}}._statusCode == 500){\r\n    var result=2;\r\n}\r\nresult;"
+        }, {
+          "name" : "check_empty_message",
+          "default" : "Robotics not ON-LINE",
+          "expression" : "{{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_Check_Empty_at_Pos5}}.value"
+        } ]
+      }, {
+        "name" : "Casepacker_Relocate_Request_Instance",
+        "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+        "model" : "Casepacker_Relocate_Request",
+        "groupAs" : "/D2DCasepackerInstances",
+        "rootValueAs" : "Object",
+        "attributes" : [ {
+          "name" : "Position",
+          "expression" : "{{this.pos}}"
+        }, {
+          "name" : "lcBarcode",
+          "default" : "N/A",
+          "expression" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos{{this.pos}}}}.LCRelocation_P{{this.pos}}_CmdLC"
+        }, {
+          "name" : "relocate_Result",
+          "default" : "0",
+          "expression" : "if({{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_Relocate_at_Pos{{this.pos}}}}._statusCode == 200){\r\n    var result=1;\r\n}else if({{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_Relocate_at_Pos{{this.pos}}}}._statusCode == 500){\r\n    var result=2;\r\n}\r\nresult;"
+        }, {
+          "name" : "relocate_message",
+          "default" : "Robotics not ON-LINE",
+          "expression" : "{{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_Relocate_at_Pos{{this.pos}}}}.value"
+        } ],
+        "template" : {
+          "name" : "Casepacker_Relocate_Request_pos{{this.pos}}",
+          "type" : "Static",
+          "params" : {
+            "pos" : "1,5,7"
+          }
+        }
+      }, {
+        "name" : "Casepacker_Relocate_Request_pos5",
+        "description" : "Instance relative to the Relocation REST API in Position 5",
+        "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+        "model" : "Casepacker_Relocate_Request",
+        "groupAs" : "/D2DCasepackerInstances",
+        "rootValueAs" : "Object",
+        "attributes" : [ {
+          "name" : "Position",
+          "expression" : "5"
+        }, {
+          "name" : "lcBarcode",
+          "default" : "N/A",
+          "expression" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos5}}.LCRelocation_P5_CmdLC"
+        }, {
+          "name" : "relocate_Result",
+          "default" : "0",
+          "expression" : "if({{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_Relocate_at_Pos5}}._statusCode == 200){\r\n    var result=1;\r\n}else if({{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_Relocate_at_Pos5}}._statusCode == 500){\r\n    var result=2;\r\n}\r\nresult;"
+        }, {
+          "name" : "relocate_message",
+          "default" : "Robotics not ON-LINE",
+          "expression" : "{{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_Relocate_at_Pos5}}.value"
+        } ]
+      }, {
+        "name" : "Casepacker_Relocate_Request_pos7",
+        "description" : "Instance relative to the Relocation REST API in Position 7",
+        "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+        "model" : "Casepacker_Relocate_Request",
+        "groupAs" : "/D2DCasepackerInstances",
+        "rootValueAs" : "Object",
+        "attributes" : [ {
+          "name" : "Position",
+          "expression" : "7"
+        }, {
+          "name" : "lcBarcode",
+          "default" : "N/A",
+          "expression" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos7}}.LCRelocation_P7_CmdLC"
+        }, {
+          "name" : "relocate_Result",
+          "default" : "0",
+          "expression" : "if({{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_Relocate_at_Pos7}}._statusCode == 200){\r\n    var result=1;\r\n}else if({{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_Relocate_at_Pos7}}._statusCode == 500){\r\n    var result=2;\r\n}\r\nresult;"
+        }, {
+          "name" : "relocate_message",
+          "default" : "Robotics not ON-LINE",
+          "expression" : "{{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_Relocate_at_Pos7}}.value"
+        } ]
+      }, {
+        "name" : "Casepacker_SerialNumber_AUTO_Request_Pos5",
+        "tags" : [ "D2DCasepacker" ],
+        "model" : "Casepacker_SerialNumber_Request",
+        "groupAs" : "/D2DCasepackerInstances",
+        "rootValueAs" : "Object",
+        "attributes" : [ {
+          "name" : "Position",
+          "expression" : "5"
+        }, {
+          "name" : "serialRequest_Result",
+          "default" : "0",
+          "expression" : "if({{Connection.ORACLE_A7_CASEPACKER.GetSerialNumber_AUTO}}[0].SERIALNUMBER === null){\r\n    var result=2;\r\n}else{\r\n    var result=1;\r\n}\r\nresult;"
+        }, {
+          "name" : "serialRequest_message"
+        }, {
+          "name" : "serialRequest_serialNumber",
+          "default" : "VOID",
+          "expression" : "{{Connection.ORACLE_A7_CASEPACKER.GetSerialNumber_AUTO}}[0].SERIALNUMBER"
+        } ]
+      }, {
+        "name" : "Casepacker_SerialNumber_MANUAl_Request",
+        "tags" : [ "D2DCasepacker" ],
+        "model" : "Casepacker_SerialNumber_Request",
+        "groupAs" : "/D2DCasepackerInstances",
+        "rootValueAs" : "Object",
+        "attributes" : [ {
+          "name" : "Position",
+          "expression" : "1"
+        }, {
+          "name" : "serialRequest_Result",
+          "default" : "0",
+          "expression" : "0"
+        }, {
+          "name" : "serialRequest_message"
+        }, {
+          "name" : "serialRequest_serialNumber",
+          "expression" : "{{Connection.ORACLE_A7_CASEPACKER.GetSerialNumber_MANUAL}}[0].SERIALNUMBER"
+        } ]
+      }, {
+        "name" : "Casepacker_TuCreation_Request_Instance",
+        "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+        "model" : "Casepacker_TuCreation_Request",
+        "groupAs" : "/D2DCasepackerInstances",
+        "rootValueAs" : "Object",
+        "attributes" : [ {
+          "name" : "Position",
+          "expression" : "5"
+        }, {
+          "name" : "lcBarcode",
+          "default" : "N/A",
+          "expression" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos{{this.pos}}}}.TUCreation_P{{this.pos}}_CmdLC"
+        }, {
+          "name" : "outTuCreation_result",
+          "default" : "0",
+          "expression" : "if({{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_TuCreation_at_Pos{{this.pos}}}}._statusCode == 200){\r\n    var result=1;\r\n}else if({{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_TuCreation_at_Pos{{this.pos}}}}._statusCode == 500){\r\n    var result=2;\r\n}\r\nresult;"
+        }, {
+          "name" : "outTuCreation_message",
+          "default" : "Robotics not ON-LINE",
+          "expression" : "{{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_TuCreation_at_Pos{{this.pos}}}}.value"
+        }, {
+          "name" : "outTuCreation_tuIdentifier"
+        } ],
+        "template" : {
+          "name" : "Casepacker_TuCreation_Request_Pos{{this.pos}}",
+          "type" : "Static",
+          "params" : {
+            "pos" : "5"
+          }
+        }
+      }, {
+        "name" : "Casepacker_TuCreation_Request_Pos5",
+        "description" : "Instance relative to the TUCreation REST API in Position 5",
+        "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+        "model" : "Casepacker_TuCreation_Request",
+        "groupAs" : "/D2DCasepackerInstances",
+        "rootValueAs" : "Object",
+        "attributes" : [ {
+          "name" : "Position",
+          "expression" : "5"
+        }, {
+          "name" : "lcBarcode",
+          "default" : "N/A",
+          "expression" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos5}}.TUCreation_P5_CmdLC"
+        }, {
+          "name" : "outTuCreation_result",
+          "default" : "0",
+          "expression" : "if({{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_TuCreation_at_Pos5}}._statusCode == 200){\r\n    var result=1;\r\n}else if({{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_TuCreation_at_Pos5}}._statusCode == 500){\r\n    var result=2;\r\n}\r\nresult;"
+        }, {
+          "name" : "outTuCreation_message",
+          "default" : "Robotics not ON-LINE",
+          "expression" : "{{Connection.REST_A7_CASEPACKER_ROBOTICS.Casepacker_TuCreation_at_Pos5}}.value"
+        }, {
+          "name" : "outTuCreation_tuIdentifier"
+        } ]
+      } ]
+    },
+    "flows" : [ {
+      "name" : "Casepacker_CheckManualSerial_to_Pipeline",
+      "description" : "This Flows check with a polling of 4 seconds, if a new Manual serial number has been added to the \nSESNUMBERS table.",
+      "tags" : [ "D2DCasepacker" ],
+      "inReferences" : [ "{{Instance.Casepacker_SerialNumber_MANUAl_Request}}" ],
+      "outReferences" : [ "{{Pipeline.Casepacker_SerialRequest_MANUAL_to_PMX}}" ],
+      "groupAs" : "/D2DCasepackerFlows",
+      "enabled" : false,
+      "publishMode" : "All",
+      "trigger" : {
+        "type" : "Exception",
+        "interval" : {
+          "duration" : 4,
+          "units" : "Seconds"
+        },
+        "mode" : "OnTrue",
+        "expression" : "if({{Connection.ORACLE_A7_CASEPACKER.CheckManualSerial}}[0].FOUND == 1){\r\n    var result=true;\r\n}else{\r\n    var result=false;\r\n}\r\nresult;",
+        "delay" : {
+          "duration" : 20,
+          "units" : "Milliseconds"
+        }
+      }
+    }, {
+      "name" : "Casepacker_ChkEptyCmd_to_Pipeline_P5",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "inReferences" : [ "{{Instance.Casepacker_Check_Empty_Request_pos5}}" ],
+      "outReferences" : [ "{{Pipeline.Casepacker_ChkEptyCmd_P5_to_PLC}}" ],
+      "groupAs" : "/D2DCasepackerFlows",
+      "enabled" : false,
+      "publishMode" : "All",
+      "trigger" : {
+        "type" : "Exception",
+        "interval" : {
+          "duration" : 1,
+          "units" : "Seconds"
+        },
+        "mode" : "OnTrue",
+        "expression" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos5}}.EmptyLCIdentification_P5_CmdReq",
+        "delay" : {
+          "duration" : 10,
+          "units" : "Milliseconds"
+        }
+      }
+    }, {
+      "name" : "Casepacker_ChkEptyCmd_to_Pipeline_P7",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "inReferences" : [ "{{Instance.Casepacker_Check_Empty_Request_pos7}}" ],
+      "outReferences" : [ "{{Pipeline.Casepacker_ChkEptyCmd_P7_to_PLC}}" ],
+      "groupAs" : "/D2DCasepackerFlows",
+      "enabled" : false,
+      "publishMode" : "All",
+      "trigger" : {
+        "type" : "Exception",
+        "interval" : {
+          "duration" : 1,
+          "units" : "Seconds"
+        },
+        "mode" : "OnTrue",
+        "expression" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos7}}.EmptyLCIdentification_P7_CmdReq",
+        "delay" : {
+          "duration" : 10,
+          "units" : "Milliseconds"
+        }
+      }
+    }, {
+      "name" : "Casepacker_PLCTags_to_MQTT",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "inReferences" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.PLC_CSPK_A7_Pos_5}}", "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.PLC_CSPK_A7_Pos_7}}" ],
+      "outReferences" : [ "{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_Kepware_values}}" ],
+      "groupAs" : "/D2DCasepackerFlows",
+      "enabled" : false,
+      "publishMode" : "All",
+      "trigger" : {
+        "type" : "Polled",
+        "interval" : {
+          "duration" : 1,
+          "units" : "Seconds"
+        },
+        "mode" : "Always",
+        "delay" : {
+          "duration" : 0,
+          "units" : "Seconds"
+        }
+      }
+    }, {
+      "name" : "Casepacker_RelocateCmd_to_Pipeline_P5",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "inReferences" : [ "{{Instance.Casepacker_Relocate_Request_pos5}}" ],
+      "outReferences" : [ "{{Pipeline.Casepacker_Relocate_P5_to_PLC}}" ],
+      "groupAs" : "/D2DCasepackerFlows",
+      "enabled" : false,
+      "publishMode" : "All",
+      "trigger" : {
+        "type" : "Exception",
+        "interval" : {
+          "duration" : 1,
+          "units" : "Seconds"
+        },
+        "mode" : "OnTrue",
+        "expression" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos5}}.LCRelocation_P5_CmdReq",
+        "delay" : {
+          "duration" : 10,
+          "units" : "Milliseconds"
+        }
+      }
+    }, {
+      "name" : "Casepacker_RelocateCmd_to_Pipeline_P7",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "inReferences" : [ "{{Instance.Casepacker_Relocate_Request_pos7}}" ],
+      "outReferences" : [ "{{Pipeline.Casepacker_Relocate_P7_to_PLC}}" ],
+      "groupAs" : "/D2DCasepackerFlows",
+      "enabled" : false,
+      "publishMode" : "All",
+      "trigger" : {
+        "type" : "Exception",
+        "interval" : {
+          "duration" : 1,
+          "units" : "Seconds"
+        },
+        "mode" : "OnTrue",
+        "expression" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos7}}.LCRelocation_P7_CmdReq",
+        "delay" : {
+          "duration" : 10,
+          "units" : "Milliseconds"
+        }
+      }
+    }, {
+      "name" : "Casepacker_SerialRequestCmd_to_Pipeline_P5",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "inReferences" : [ "{{Instance.Casepacker_SerialNumber_AUTO_Request_Pos5}}" ],
+      "outReferences" : [ "{{Pipeline.Casepacker_SerialRequest_P5_to_PLC}}" ],
+      "groupAs" : "/D2DCasepackerFlows",
+      "enabled" : false,
+      "publishMode" : "All",
+      "trigger" : {
+        "type" : "Exception",
+        "interval" : {
+          "duration" : 1,
+          "units" : "Seconds"
+        },
+        "mode" : "OnTrue",
+        "expression" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos5}}.SerialRequest_P5_CmdReq",
+        "delay" : {
+          "duration" : 10,
+          "units" : "Milliseconds"
+        }
+      }
+    }, {
+      "name" : "Casepacker_TuCreationCmd_to_Pipeline_P5",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "inReferences" : [ "{{Instance.Casepacker_TuCreation_Request_Pos5}}" ],
+      "outReferences" : [ "{{Pipeline.Casepacker_TUCreation_P5_to_PLC}}" ],
+      "groupAs" : "/D2DCasepackerFlows",
+      "enabled" : false,
+      "publishMode" : "All",
+      "trigger" : {
+        "type" : "Exception",
+        "interval" : {
+          "duration" : 1,
+          "units" : "Seconds"
+        },
+        "mode" : "OnTrue",
+        "expression" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL.Casepacker_PLC_Values_Pos5}}.TUCreation_P5_CmdReq",
+        "delay" : {
+          "duration" : 10,
+          "units" : "Milliseconds"
+        }
+      }
+    } ],
+    "conditions" : [ ],
+    "functions" : [ ],
+    "tags" : [ {
+      "name" : "D2DCasepacker",
+      "description" : "Objects tagged with this tag are intended for Dock-2-Dock integration - Casepacker Machine"
+    } ],
+    "pipelines" : [ {
+      "name" : "Casepacker_ChkEptyCmd_P5_to_PLC",
+      "uri" : "pipeline",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "settings" : {
+        "inputStages" : [ "SizeBuffer", "Transform_ack" ],
+        "trackActivity" : true,
+        "stages" : [ {
+          "name" : "Write_statusCode",
+          "outputs" : [ "Collecting_Log" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ "Format_errorLog" ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.EmptyLCIdentification_P5_Result}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 950
+            }
+          }
+        }, {
+          "name" : "Write_Message",
+          "outputs" : [ "Collecting_Log" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ "Format_errorLog" ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.EmptyLCIdentification_P5_ResMessage}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 950
+            }
+          }
+        }, {
+          "name" : "Transform_result",
+          "outputs" : [ "Write_statusCode" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(event.value[0].check_empty_result.toString());"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 825
+            }
+          }
+        }, {
+          "name" : "Transform_message",
+          "outputs" : [ "Write_Message" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(event.value[0].check_empty_message);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 825
+            }
+          }
+        }, {
+          "name" : "Write_ack",
+          "outputs" : [ "Transform" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ "Format_errorAck" ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.EmptyLCIdentification_P5_ReqAck}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 275
+            }
+          }
+        }, {
+          "name" : "Transform_ack",
+          "outputs" : [ "Write_ack" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(true);"
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 150
+            }
+          }
+        }, {
+          "name" : "Write_successLog",
+          "outputs" : [ ],
+          "config" : {
+            "type" : ".DynamicWriteConfig",
+            "failureOutputs" : [ ],
+            "connectionReference" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL}}",
+            "qualifier" : {
+              "topic" : "sesto/PDL/A7Wet/Casepacker/pipelinestatus/Check_Empty_P5/Last_Success",
+              "qos" : 0,
+              "namedRoot" : false,
+              "retained" : true,
+              "breakupArrays" : false
+            },
+            "qualifierExpression" : "",
+            "connectionType" : "mqtt"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1375
+            }
+          }
+        }, {
+          "name" : "Collecting_Log",
+          "outputs" : [ "Format_Log" ],
+          "config" : {
+            "type" : ".SizedBufferConfig",
+            "windowExpression" : "stage.setBufferKey(null);",
+            "windowSize" : 2,
+            "timeout" : {
+              "duration" : 200,
+              "units" : "Milliseconds"
+            }
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1125
+            }
+          }
+        }, {
+          "name" : "Format_Log",
+          "outputs" : [ "Write_successLog" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "if(event.value.length!=2){\r\n    stage.setValue(null);\r\n}else{\r\n    var log={\r\n        \"Log\": \"CheckEmpty REST API request in Casepacker Position 5 successfully executed\"\r\n    }\r\n    stage.setValue(log);\r\n};"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1250
+            }
+          }
+        }, {
+          "name" : "SizeBuffer",
+          "outputs" : [ "Format_data" ],
+          "config" : {
+            "type" : ".SizedBufferConfig",
+            "windowExpression" : "stage.setBufferKey(null);",
+            "windowSize" : 2,
+            "timeout" : {
+              "duration" : 300,
+              "units" : "Milliseconds"
+            }
+          },
+          "display" : {
+            "position" : {
+              "x" : 0,
+              "y" : 550
+            }
+          }
+        }, {
+          "name" : "Transform",
+          "outputs" : [ "SizeBuffer" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var ack={\"ack\": event.value};\r\nstage.setValue(ack);"
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 400
+            }
+          }
+        }, {
+          "name" : "Format_errorAck",
+          "outputs" : [ "Write_errorMessage" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var log={\r\n    \"Log\": event.metadata.writeFailures[0]\r\n};\r\nstage.setValue(log);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 600,
+              "y" : 450
+            }
+          }
+        }, {
+          "name" : "Format_data",
+          "outputs" : [ "Transform_result", "Transform_message" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "if(event.value.length!=2){\r\n    stage.setValue(null);\r\n}else{\r\n    stage.setValue(event.value);\r\n};"
+          },
+          "display" : {
+            "position" : {
+              "x" : 0,
+              "y" : 675
+            }
+          }
+        }, {
+          "name" : "Format_errorLog",
+          "outputs" : [ "Write_errorMessage" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var log={\r\n    \"Log\": event.metadata.writeFailures[0]\r\n};\r\nstage.setValue(log);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 1125
+            }
+          }
+        }, {
+          "name" : "Write_errorMessage",
+          "outputs" : [ ],
+          "config" : {
+            "type" : ".DynamicWriteConfig",
+            "failureOutputs" : [ ],
+            "connectionReference" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL}}",
+            "qualifier" : {
+              "topic" : "sesto/PDL/A7Wet/Casepacker/pipelinestatus/Check_Empty_P5/Last_Error",
+              "qos" : 0,
+              "namedRoot" : false,
+              "retained" : true,
+              "breakupArrays" : false
+            },
+            "qualifierExpression" : "",
+            "connectionType" : "mqtt"
+          },
+          "display" : {
+            "position" : {
+              "x" : 600,
+              "y" : 600
+            }
+          }
+        } ]
+      }
+    }, {
+      "name" : "Casepacker_ChkEptyCmd_P7_to_PLC",
+      "uri" : "pipeline",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "settings" : {
+        "inputStages" : [ "SizeBuffer", "Transform_ack" ],
+        "trackActivity" : false,
+        "stages" : [ {
+          "name" : "Write_statusCode",
+          "outputs" : [ "Collecting_Log" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.SerialRequest_P5_Result}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 950
+            }
+          }
+        }, {
+          "name" : "Write_Message",
+          "outputs" : [ "Collecting_Log" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.SerialRequest_P5_ErrorMsg}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 950
+            }
+          }
+        }, {
+          "name" : "Transform_result",
+          "outputs" : [ "Write_statusCode" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(event.value[0].check_empty_result.toString());"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 825
+            }
+          }
+        }, {
+          "name" : "Transform_message",
+          "outputs" : [ "Write_Message" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(event.value[0].check_empty_message);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 825
+            }
+          }
+        }, {
+          "name" : "Write_ack",
+          "outputs" : [ "Transform" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.SerialRequest_P5_ReqAck}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 275
+            }
+          }
+        }, {
+          "name" : "Transform_ack",
+          "outputs" : [ "Write_ack" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(true);"
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 150
+            }
+          }
+        }, {
+          "name" : "Write_successLog",
+          "outputs" : [ ],
+          "config" : {
+            "type" : ".DynamicWriteConfig",
+            "failureOutputs" : [ ],
+            "connectionReference" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL}}",
+            "qualifier" : {
+              "topic" : "sesto/PDL/A7Wet/Casepacker/pipelinestatus/Check_Empty_P7/Last_Success",
+              "qos" : 0,
+              "namedRoot" : false,
+              "retained" : true,
+              "breakupArrays" : false
+            },
+            "qualifierExpression" : "",
+            "connectionType" : "mqtt"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1375
+            }
+          }
+        }, {
+          "name" : "Collecting_Log",
+          "outputs" : [ "Format_Log" ],
+          "config" : {
+            "type" : ".SizedBufferConfig",
+            "windowExpression" : "stage.setBufferKey(null);",
+            "windowSize" : 2,
+            "timeout" : {
+              "duration" : 200,
+              "units" : "Milliseconds"
+            }
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1125
+            }
+          }
+        }, {
+          "name" : "Format_Log",
+          "outputs" : [ "Write_successLog" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "if(event.value.length!=2){\r\n    stage.setValue(null);\r\n}else{\r\n    var log={\r\n        \"Log\": \"CheckEmpty REST API request in Casepacker Position 7 successfully executed\"\r\n    }\r\n    stage.setValue(log);\r\n};"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1250
+            }
+          }
+        }, {
+          "name" : "SizeBuffer",
+          "outputs" : [ "Format_data" ],
+          "config" : {
+            "type" : ".SizedBufferConfig",
+            "windowExpression" : "stage.setBufferKey(null);",
+            "windowSize" : 2,
+            "timeout" : {
+              "duration" : 300,
+              "units" : "Milliseconds"
+            }
+          },
+          "display" : {
+            "position" : {
+              "x" : 0,
+              "y" : 550
+            }
+          }
+        }, {
+          "name" : "Transform",
+          "outputs" : [ "SizeBuffer" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var ack={\"ack\": event.value};\r\nstage.setValue(ack);"
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 400
+            }
+          }
+        }, {
+          "name" : "Format_errorAck",
+          "outputs" : [ "Write_errorMessage" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var log={\r\n    \"Log\": event.metadata.writeFailures[0]\r\n};\r\nstage.setValue(log);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 600,
+              "y" : 450
+            }
+          }
+        }, {
+          "name" : "Format_data",
+          "outputs" : [ "Transform_result", "Transform_message" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "if(event.value.length!=2){\r\n    stage.setValue(null);\r\n}else{\r\n    stage.setValue(event.value);\r\n};"
+          },
+          "display" : {
+            "position" : {
+              "x" : 0,
+              "y" : 675
+            }
+          }
+        }, {
+          "name" : "Format_errorLog",
+          "outputs" : [ "Write_errorMessage" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var log={\r\n    \"Log\": event.metadata.writeFailures[0]\r\n};\r\nstage.setValue(log);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 1125
+            }
+          }
+        }, {
+          "name" : "Write_errorMessage",
+          "outputs" : [ ],
+          "config" : {
+            "type" : ".DynamicWriteConfig",
+            "failureOutputs" : [ ],
+            "connectionReference" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL}}",
+            "qualifier" : {
+              "topic" : "sesto/PDL/A7Wet/Casepacker/pipelinestatus/Check_Empty_P7/Last_Error",
+              "qos" : 0,
+              "namedRoot" : false,
+              "retained" : true,
+              "breakupArrays" : false
+            },
+            "qualifierExpression" : "",
+            "connectionType" : "mqtt"
+          },
+          "display" : {
+            "position" : {
+              "x" : 600,
+              "y" : 600
+            }
+          }
+        } ]
+      }
+    }, {
+      "name" : "Casepacker_Relocate_P5_to_PLC",
+      "uri" : "pipeline",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "settings" : {
+        "inputStages" : [ "SizeBuffer", "Transform_ack" ],
+        "trackActivity" : true,
+        "stages" : [ {
+          "name" : "Write_statusCode",
+          "outputs" : [ "Collecting_Log" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ "Format_errorLog" ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.LCRelocation_P5_Result}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 950
+            }
+          }
+        }, {
+          "name" : "Write_Message",
+          "outputs" : [ "Collecting_Log" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ "Format_errorLog" ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.LCRelocation_P5_ErrorMSG}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 950
+            }
+          }
+        }, {
+          "name" : "Transform_result",
+          "outputs" : [ "Write_statusCode" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(event.value[0].relocate_Result.toString());"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 825
+            }
+          }
+        }, {
+          "name" : "Transform_message",
+          "outputs" : [ "Write_Message" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(event.value[0].relocate_message);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 825
+            }
+          }
+        }, {
+          "name" : "Write_ack",
+          "outputs" : [ "Transform" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ "Format_errorAck" ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.LCRelocation_P5_ReqAck}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 275
+            }
+          }
+        }, {
+          "name" : "Transform_ack",
+          "outputs" : [ "Write_ack" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(true);"
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 150
+            }
+          }
+        }, {
+          "name" : "Write_successLog",
+          "outputs" : [ ],
+          "config" : {
+            "type" : ".DynamicWriteConfig",
+            "failureOutputs" : [ ],
+            "connectionReference" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL}}",
+            "qualifier" : {
+              "topic" : "sesto/PDL/A7Wet/Casepacker/pipelinestatus/Relocation_P5/Last_Success",
+              "qos" : 0,
+              "namedRoot" : false,
+              "retained" : true,
+              "breakupArrays" : false
+            },
+            "qualifierExpression" : "",
+            "connectionType" : "mqtt"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1375
+            }
+          }
+        }, {
+          "name" : "Collecting_Log",
+          "outputs" : [ "Format_Log" ],
+          "config" : {
+            "type" : ".SizedBufferConfig",
+            "windowExpression" : "stage.setBufferKey(null);",
+            "windowSize" : 2,
+            "timeout" : {
+              "duration" : 200,
+              "units" : "Milliseconds"
+            }
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1125
+            }
+          }
+        }, {
+          "name" : "Format_Log",
+          "outputs" : [ "Write_successLog" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "if(event.value.length!=2){\r\n    stage.setValue(null);\r\n}else{\r\n    var log={\r\n        \"Log\": \"Relocation REST API request in Casepacker Position 5 successfully executed\"\r\n    }\r\n    stage.setValue(log);\r\n};"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1250
+            }
+          }
+        }, {
+          "name" : "SizeBuffer",
+          "outputs" : [ "Format_data" ],
+          "config" : {
+            "type" : ".SizedBufferConfig",
+            "windowExpression" : "stage.setBufferKey(null);",
+            "windowSize" : 2,
+            "timeout" : {
+              "duration" : 300,
+              "units" : "Milliseconds"
+            }
+          },
+          "display" : {
+            "position" : {
+              "x" : 0,
+              "y" : 550
+            }
+          }
+        }, {
+          "name" : "Transform",
+          "outputs" : [ "SizeBuffer" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var ack={\"ack\": event.value};\r\nstage.setValue(ack);"
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 400
+            }
+          }
+        }, {
+          "name" : "Format_errorAck",
+          "outputs" : [ "Write_errorMessage" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var log={\r\n    \"Log\": event.metadata.writeFailures[0]\r\n};\r\nstage.setValue(log);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 600,
+              "y" : 450
+            }
+          }
+        }, {
+          "name" : "Format_data",
+          "outputs" : [ "Transform_result", "Transform_message" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "if(event.value.length!=2){\r\n    stage.setValue(null);\r\n}else{\r\n    stage.setValue(event.value);\r\n};"
+          },
+          "display" : {
+            "position" : {
+              "x" : 0,
+              "y" : 675
+            }
+          }
+        }, {
+          "name" : "Format_errorLog",
+          "outputs" : [ "Write_errorMessage" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var log={\r\n    \"Log\": event.metadata.writeFailures[0]\r\n};\r\nstage.setValue(log);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 1125
+            }
+          }
+        }, {
+          "name" : "Write_errorMessage",
+          "outputs" : [ ],
+          "config" : {
+            "type" : ".DynamicWriteConfig",
+            "failureOutputs" : [ ],
+            "connectionReference" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL}}",
+            "qualifier" : {
+              "topic" : "sesto/PDL/A7Wet/Casepacker/pipelinestatus/Relocation_P5/Last_Error",
+              "qos" : 0,
+              "namedRoot" : false,
+              "retained" : true,
+              "breakupArrays" : false
+            },
+            "qualifierExpression" : "",
+            "connectionType" : "mqtt"
+          },
+          "display" : {
+            "position" : {
+              "x" : 600,
+              "y" : 600
+            }
+          }
+        } ]
+      }
+    }, {
+      "name" : "Casepacker_Relocate_P7_to_PLC",
+      "uri" : "pipeline",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "settings" : {
+        "inputStages" : [ "SizeBuffer", "Transform_ack" ],
+        "trackActivity" : true,
+        "stages" : [ {
+          "name" : "Write_statusCode",
+          "outputs" : [ "Collecting_Log" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ "Format_errorLog" ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.LCRelocation_P7_Result}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 950
+            }
+          }
+        }, {
+          "name" : "Write_Message",
+          "outputs" : [ "Collecting_Log" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ "Format_errorLog" ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.LCRelocation_P7_ErrorMSG}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 950
+            }
+          }
+        }, {
+          "name" : "Transform_result",
+          "outputs" : [ "Write_statusCode" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(event.value[0].relocate_Result.toString());"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 825
+            }
+          }
+        }, {
+          "name" : "Transform_message",
+          "outputs" : [ "Write_Message" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(event.value[0].relocate_message);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 825
+            }
+          }
+        }, {
+          "name" : "Write_ack",
+          "outputs" : [ "Transform" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ "Format_errorAck" ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.LCRelocation_P7_ReqAck}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 275
+            }
+          }
+        }, {
+          "name" : "Transform_ack",
+          "outputs" : [ "Write_ack" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(true);"
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 150
+            }
+          }
+        }, {
+          "name" : "Write_successLog",
+          "outputs" : [ ],
+          "config" : {
+            "type" : ".DynamicWriteConfig",
+            "failureOutputs" : [ ],
+            "connectionReference" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL}}",
+            "qualifier" : {
+              "topic" : "sesto/PDL/A7Wet/Casepacker/pipelinestatus/Relocation_P7/Last_Success",
+              "qos" : 0,
+              "namedRoot" : false,
+              "retained" : true,
+              "breakupArrays" : false
+            },
+            "qualifierExpression" : "",
+            "connectionType" : "mqtt"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1375
+            }
+          }
+        }, {
+          "name" : "Collecting_Log",
+          "outputs" : [ "Format_Log" ],
+          "config" : {
+            "type" : ".SizedBufferConfig",
+            "windowExpression" : "stage.setBufferKey(null);",
+            "windowSize" : 2,
+            "timeout" : {
+              "duration" : 200,
+              "units" : "Milliseconds"
+            }
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1125
+            }
+          }
+        }, {
+          "name" : "Format_Log",
+          "outputs" : [ "Write_successLog" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "if(event.value.length!=2){\r\n    stage.setValue(null);\r\n}else{\r\n    var log={\r\n        \"Log\": \"Relocation REST API request in Casepacker Position 7 successfully executed\"\r\n    }\r\n    stage.setValue(log);\r\n};"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1250
+            }
+          }
+        }, {
+          "name" : "SizeBuffer",
+          "outputs" : [ "Format_data" ],
+          "config" : {
+            "type" : ".SizedBufferConfig",
+            "windowExpression" : "stage.setBufferKey(null);",
+            "windowSize" : 2,
+            "timeout" : {
+              "duration" : 300,
+              "units" : "Milliseconds"
+            }
+          },
+          "display" : {
+            "position" : {
+              "x" : 0,
+              "y" : 550
+            }
+          }
+        }, {
+          "name" : "Transform",
+          "outputs" : [ "SizeBuffer" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var ack={\"ack\": event.value};\r\nstage.setValue(ack);"
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 400
+            }
+          }
+        }, {
+          "name" : "Format_errorAck",
+          "outputs" : [ "Write_errorMessage" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var log={\r\n    \"Log\": event.metadata.writeFailures[0]\r\n};\r\nstage.setValue(log);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 600,
+              "y" : 450
+            }
+          }
+        }, {
+          "name" : "Format_data",
+          "outputs" : [ "Transform_result", "Transform_message" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "if(event.value.length!=2){\r\n    stage.setValue(null);\r\n}else{\r\n    stage.setValue(event.value);\r\n};"
+          },
+          "display" : {
+            "position" : {
+              "x" : 0,
+              "y" : 675
+            }
+          }
+        }, {
+          "name" : "Format_errorLog",
+          "outputs" : [ "Write_errorMessage" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var log={\r\n    \"Log\": event.metadata.writeFailures[0]\r\n};\r\nstage.setValue(log);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 1125
+            }
+          }
+        }, {
+          "name" : "Write_errorMessage",
+          "outputs" : [ ],
+          "config" : {
+            "type" : ".DynamicWriteConfig",
+            "failureOutputs" : [ ],
+            "connectionReference" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL}}",
+            "qualifier" : {
+              "topic" : "sesto/PDL/A7Wet/Casepacker/pipelinestatus/Relocation_P7/Last_Error",
+              "qos" : 0,
+              "namedRoot" : false,
+              "retained" : true,
+              "breakupArrays" : false
+            },
+            "qualifierExpression" : "",
+            "connectionType" : "mqtt"
+          },
+          "display" : {
+            "position" : {
+              "x" : 600,
+              "y" : 600
+            }
+          }
+        } ]
+      }
+    }, {
+      "name" : "Casepacker_SerialRequest_MANUAL_to_PMX",
+      "uri" : "pipeline",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "settings" : {
+        "inputStages" : [ "Transform_Serial" ],
+        "trackActivity" : true,
+        "stages" : [ {
+          "name" : "Write_Serial",
+          "outputs" : [ "Format_Log" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ "Format_errorLog" ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.SerialRequest_P5_SerialNumber}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : 0,
+              "y" : 250
+            }
+          }
+        }, {
+          "name" : "Transform_Serial",
+          "outputs" : [ "Write_Serial" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(event.value[0].serialRequest_serialNumber.toString());"
+          },
+          "display" : {
+            "position" : {
+              "x" : 0,
+              "y" : 125
+            }
+          }
+        }, {
+          "name" : "Write_successLog",
+          "outputs" : [ "SetToProcessed" ],
+          "config" : {
+            "type" : ".DynamicWriteConfig",
+            "failureOutputs" : [ ],
+            "connectionReference" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL}}",
+            "qualifier" : {
+              "topic" : "sesto/PDL/A7Wet/Casepacker/pipelinestatus/SerialManualRequest/Last_Success",
+              "qos" : 0,
+              "namedRoot" : false,
+              "retained" : true,
+              "breakupArrays" : false
+            },
+            "qualifierExpression" : "",
+            "connectionType" : "mqtt"
+          },
+          "display" : {
+            "position" : {
+              "x" : -150,
+              "y" : 525
+            }
+          }
+        }, {
+          "name" : "Format_Log",
+          "outputs" : [ "Write_successLog" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var log={\r\n    \"Log\": \"SerialManualRequest request successfully executed\"\r\n}\r\nstage.setValue(log);\r\n"
+          },
+          "display" : {
+            "position" : {
+              "x" : -150,
+              "y" : 400
+            }
+          }
+        }, {
+          "name" : "Format_errorLog",
+          "outputs" : [ "Write_errorMessage" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var log={\r\n    \"Log\": event.metadata.writeFailures[0]\r\n};\r\nstage.setValue(log);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 175,
+              "y" : 400
+            }
+          }
+        }, {
+          "name" : "Write_errorMessage",
+          "outputs" : [ ],
+          "config" : {
+            "type" : ".DynamicWriteConfig",
+            "failureOutputs" : [ ],
+            "connectionReference" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL}}",
+            "qualifier" : {
+              "topic" : "sesto/PDL/A7Wet/Casepacker/pipelinestatus/SerialManualRequest/Last_Error",
+              "qos" : 0,
+              "namedRoot" : false,
+              "retained" : true,
+              "breakupArrays" : false
+            },
+            "qualifierExpression" : "",
+            "connectionType" : "mqtt"
+          },
+          "display" : {
+            "position" : {
+              "x" : 175,
+              "y" : 525
+            }
+          }
+        }, {
+          "name" : "SetToProcessed",
+          "outputs" : [ ],
+          "config" : {
+            "type" : ".ReadSourcesConfig",
+            "keyReferences" : [ {
+              "location" : "child",
+              "key" : "Result",
+              "reference" : "{{Connection.ORACLE_A7_CASEPACKER.MarkAsProcessed}}"
+            } ],
+            "inputValueLocation" : "exclude",
+            "inputValueKey" : "eventIn"
+          },
+          "display" : {
+            "position" : {
+              "x" : 25,
+              "y" : 675
+            }
+          }
+        } ]
+      }
+    }, {
+      "name" : "Casepacker_SerialRequest_P5_to_PLC",
+      "uri" : "pipeline",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "settings" : {
+        "inputStages" : [ "SizeBuffer", "Transform_ack" ],
+        "trackActivity" : true,
+        "stages" : [ {
+          "name" : "Write_statusCode",
+          "outputs" : [ "Collecting_Log" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ "Format_errorLog" ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.SerialRequest_P5_Result}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 950
+            }
+          }
+        }, {
+          "name" : "Write_Serial",
+          "outputs" : [ "Collecting_Log" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ "Format_errorLog" ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.SerialRequest_P5_SerialNumber}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 950
+            }
+          }
+        }, {
+          "name" : "Transform_result",
+          "outputs" : [ "Write_statusCode" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(event.value[0].serialRequest_Result.toString());"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 800
+            }
+          }
+        }, {
+          "name" : "Transform_Serial",
+          "outputs" : [ "Write_Serial" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(event.value[0].serialRequest_serialNumber.toString());"
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 800
+            }
+          }
+        }, {
+          "name" : "Write_ack",
+          "outputs" : [ "Transform" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ "Format_errorAck" ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.SerialRequest_P5_ReqAck}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 275
+            }
+          }
+        }, {
+          "name" : "Transform_ack",
+          "outputs" : [ "Write_ack" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(true);"
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 150
+            }
+          }
+        }, {
+          "name" : "Write_successLog",
+          "outputs" : [ ],
+          "config" : {
+            "type" : ".DynamicWriteConfig",
+            "failureOutputs" : [ ],
+            "connectionReference" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL}}",
+            "qualifier" : {
+              "topic" : "sesto/PDL/A7Wet/Casepacker/pipelinestatus/SerialRequest_P5/Last_Success",
+              "qos" : 0,
+              "namedRoot" : false,
+              "retained" : true,
+              "breakupArrays" : false
+            },
+            "qualifierExpression" : "",
+            "connectionType" : "mqtt"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1375
+            }
+          }
+        }, {
+          "name" : "Collecting_Log",
+          "outputs" : [ "Format_Log" ],
+          "config" : {
+            "type" : ".SizedBufferConfig",
+            "windowExpression" : "stage.setBufferKey(null);",
+            "windowSize" : 2,
+            "timeout" : {
+              "duration" : 200,
+              "units" : "Milliseconds"
+            }
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1125
+            }
+          }
+        }, {
+          "name" : "Format_Log",
+          "outputs" : [ "Write_successLog" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "if(event.value.length!=2){\r\n    stage.setValue(null);\r\n}else{\r\n    var log={\r\n        \"Log\": \"SerialRequest request in Casepacker Position 5 successfully executed\"\r\n    }\r\n    stage.setValue(log);\r\n};"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1250
+            }
+          }
+        }, {
+          "name" : "SizeBuffer",
+          "outputs" : [ "Format_data" ],
+          "config" : {
+            "type" : ".SizedBufferConfig",
+            "windowExpression" : "stage.setBufferKey(null);",
+            "windowSize" : 2,
+            "timeout" : {
+              "duration" : 300,
+              "units" : "Milliseconds"
+            }
+          },
+          "display" : {
+            "position" : {
+              "x" : 0,
+              "y" : 550
+            }
+          }
+        }, {
+          "name" : "Transform",
+          "outputs" : [ "SizeBuffer" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var ack={\"ack\": event.value};\r\nstage.setValue(ack);"
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 400
+            }
+          }
+        }, {
+          "name" : "Format_errorAck",
+          "outputs" : [ "Write_errorMessage" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var log={\r\n    \"Log\": event.metadata.writeFailures[0]\r\n};\r\nstage.setValue(log);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 600,
+              "y" : 450
+            }
+          }
+        }, {
+          "name" : "Format_data",
+          "outputs" : [ "Transform_result", "Transform_Serial" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "if(event.value.length!=2){\r\n    stage.setValue(null);\r\n}else{\r\n    stage.setValue(event.value);\r\n};"
+          },
+          "display" : {
+            "position" : {
+              "x" : 0,
+              "y" : 675
+            }
+          }
+        }, {
+          "name" : "Format_errorLog",
+          "outputs" : [ "Write_errorMessage" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var log={\r\n    \"Log\": event.metadata.writeFailures[0]\r\n};\r\nstage.setValue(log);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 1125
+            }
+          }
+        }, {
+          "name" : "Write_errorMessage",
+          "outputs" : [ ],
+          "config" : {
+            "type" : ".DynamicWriteConfig",
+            "failureOutputs" : [ ],
+            "connectionReference" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL}}",
+            "qualifier" : {
+              "topic" : "sesto/PDL/A7Wet/Casepacker/pipelinestatus/SerialRequest_P5/Last_Error",
+              "qos" : 0,
+              "namedRoot" : false,
+              "retained" : true,
+              "breakupArrays" : false
+            },
+            "qualifierExpression" : "",
+            "connectionType" : "mqtt"
+          },
+          "display" : {
+            "position" : {
+              "x" : 600,
+              "y" : 600
+            }
+          }
+        } ]
+      }
+    }, {
+      "name" : "Casepacker_TUCreation_P5_to_PLC",
+      "uri" : "pipeline",
+      "tags" : [ "A7Wet", "D2DCasepacker", "PDL" ],
+      "settings" : {
+        "inputStages" : [ "SizeBuffer", "Transform_ack" ],
+        "trackActivity" : true,
+        "stages" : [ {
+          "name" : "Write_statusCode",
+          "outputs" : [ "Collecting_Log" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ "Format_errorLog" ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.TUCreation_P5_Result}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 950
+            }
+          }
+        }, {
+          "name" : "Write_Message",
+          "outputs" : [ "Collecting_Log" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ "Format_errorLog" ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.TUCreation_P5_ErrorMSG}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 950
+            }
+          }
+        }, {
+          "name" : "Transform_result",
+          "outputs" : [ "Write_statusCode" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(event.value[0].outTuCreation_result.toString());"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 825
+            }
+          }
+        }, {
+          "name" : "Transform_message",
+          "outputs" : [ "Write_Message" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(event.value[0].outTuCreation_message);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 825
+            }
+          }
+        }, {
+          "name" : "Write_ack",
+          "outputs" : [ "Transform" ],
+          "config" : {
+            "type" : ".WriteConfig",
+            "failureOutputs" : [ "Format_errorAck" ],
+            "references" : [ "{{Connection.OPC_A7_CASEPACKER_KEPSERVEREX.TUCreation_P5_ReqAck}}" ]
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 275
+            }
+          }
+        }, {
+          "name" : "Transform_ack",
+          "outputs" : [ "Write_ack" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "stage.setValue(true);"
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 150
+            }
+          }
+        }, {
+          "name" : "Write_successLog",
+          "outputs" : [ ],
+          "config" : {
+            "type" : ".DynamicWriteConfig",
+            "failureOutputs" : [ ],
+            "connectionReference" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL}}",
+            "qualifier" : {
+              "topic" : "sesto/PDL/A7Wet/Casepacker/pipelinestatus/TUCreation_P5/Last_Success",
+              "qos" : 0,
+              "namedRoot" : false,
+              "retained" : true,
+              "breakupArrays" : false
+            },
+            "qualifierExpression" : "",
+            "connectionType" : "mqtt"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1375
+            }
+          }
+        }, {
+          "name" : "Collecting_Log",
+          "outputs" : [ "Format_Log" ],
+          "config" : {
+            "type" : ".SizedBufferConfig",
+            "windowExpression" : "stage.setBufferKey(null);",
+            "windowSize" : 2,
+            "timeout" : {
+              "duration" : 200,
+              "units" : "Milliseconds"
+            }
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1125
+            }
+          }
+        }, {
+          "name" : "Format_Log",
+          "outputs" : [ "Write_successLog" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "if(event.value.length!=2){\r\n    stage.setValue(null);\r\n}else{\r\n    var log={\r\n        \"Log\": \"TUCreation REST API request in Casepacker Position 5 successfully executed\"\r\n    }\r\n    stage.setValue(log);\r\n};"
+          },
+          "display" : {
+            "position" : {
+              "x" : -200,
+              "y" : 1250
+            }
+          }
+        }, {
+          "name" : "SizeBuffer",
+          "outputs" : [ "Format_data" ],
+          "config" : {
+            "type" : ".SizedBufferConfig",
+            "windowExpression" : "stage.setBufferKey(null);",
+            "windowSize" : 2,
+            "timeout" : {
+              "duration" : 300,
+              "units" : "Milliseconds"
+            }
+          },
+          "display" : {
+            "position" : {
+              "x" : 0,
+              "y" : 550
+            }
+          }
+        }, {
+          "name" : "Transform",
+          "outputs" : [ "SizeBuffer" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var ack={\"ack\": event.value};\r\nstage.setValue(ack);"
+          },
+          "display" : {
+            "position" : {
+              "x" : -225,
+              "y" : 400
+            }
+          }
+        }, {
+          "name" : "Format_errorAck",
+          "outputs" : [ "Write_errorMessage" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var log={\r\n    \"Log\": event.metadata.writeFailures[0]\r\n};\r\nstage.setValue(log);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 600,
+              "y" : 450
+            }
+          }
+        }, {
+          "name" : "Format_data",
+          "outputs" : [ "Transform_result", "Transform_message" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "if(event.value.length!=2){\r\n    stage.setValue(null);\r\n}else{\r\n    stage.setValue(event.value);\r\n};"
+          },
+          "display" : {
+            "position" : {
+              "x" : 0,
+              "y" : 675
+            }
+          }
+        }, {
+          "name" : "Format_errorLog",
+          "outputs" : [ "Write_errorMessage" ],
+          "config" : {
+            "type" : ".TransformConfig",
+            "transformExpression" : "var log={\r\n    \"Log\": event.metadata.writeFailures[0]\r\n};\r\nstage.setValue(log);"
+          },
+          "display" : {
+            "position" : {
+              "x" : 200,
+              "y" : 1125
+            }
+          }
+        }, {
+          "name" : "Write_errorMessage",
+          "outputs" : [ ],
+          "config" : {
+            "type" : ".DynamicWriteConfig",
+            "failureOutputs" : [ ],
+            "connectionReference" : "{{Connection.MQTT_A7_CASEPACKER_LOCAL}}",
+            "qualifier" : {
+              "topic" : "sesto/PDL/A7Wet/Casepacker/pipelinestatus/TUCreation_P5/Last_Error",
+              "qos" : 0,
+              "namedRoot" : false,
+              "retained" : true,
+              "breakupArrays" : false
+            },
+            "qualifierExpression" : "",
+            "connectionType" : "mqtt"
+          },
+          "display" : {
+            "position" : {
+              "x" : 600,
+              "y" : 600
+            }
+          }
+        } ]
+      }
+    } ]
+  },
+  "network" : {
+    "groups" : [ ],
+    "hubs" : [ ]
+  }
+}
